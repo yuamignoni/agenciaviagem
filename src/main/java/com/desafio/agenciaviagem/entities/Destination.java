@@ -2,11 +2,19 @@ package com.desafio.agenciaviagem.entities;
 
 import java.io.Serializable;
 import java.util.Objects;
+import jakarta.validation.constraints.*;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "tb_destination")
 public class Destination implements Serializable {
 	private static final long serialVersionUID = 1L;
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String location;
     private String description;
     private Double averageRating;
