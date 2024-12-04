@@ -1,9 +1,10 @@
 # Travel Agency API 🌍
 
 Esta é uma API RESTful desenvolvida em **Java** com **Spring Boot** para gerenciar os destinos de viagem de uma agência. A API permite o cadastro, consulta, avaliação e exclusão de destinos de forma simples e eficiente.
-
+---
 ## 🛠️ Funcionalidades
 
+### **Destinos**
 - **Cadastro de destinos de viagem**
 - **Listagem de todos os destinos**
 - **Busca de destinos por nome ou localização**
@@ -11,6 +12,19 @@ Esta é uma API RESTful desenvolvida em **Java** com **Spring Boot** para gerenc
 - **Avaliação de destinos (1 a 10, com cálculo de média)**
 - **Exclusão de destinos de viagem**
 
+### **Usuários**
+- **Cadastro de usuários**
+- **Atualização de usuários**
+- **Listagem de usuários**
+- **Busca de usuários por ID**
+- **Exclusão de usuários**
+
+### **Controle de Acesso**
+- **Acesso aos endpoints de destinos para usuários autenticados**
+- **Endpoints administrativos acessíveis somente para administradores**
+- **Sistema de autenticação com roles (usuário e administrador)**
+
+---
 ## 📦 Endpoints Disponíveis
 
 ### 1. **Cadastrar Destino**
@@ -130,6 +144,115 @@ Esta é uma API RESTful desenvolvida em **Java** com **Spring Boot** para gerenc
 - **Resposta**: `204 No Content`
 
 ---
+### **2. CRUD de Usuários**
+
+#### **1. Listar Todos os Usuários**
+- **Método**: `GET`
+- **URL**: `/admin/users`
+- **Acesso**: Apenas administradores
+- **Resposta**:
+  ```json
+  [
+    {
+      "id": 1,
+      "username": "admin",
+      "roles": [
+        {
+          "id": 1,
+          "name": "ROLE_ADMIN"
+        }
+      ]
+    }
+  ]
+  ```
+
+#### **2. Obter Usuário por ID**
+- **Método**: `GET`
+- **URL**: `/admin/users/{id}`
+- **Acesso**: Apenas administradores
+- **Resposta**:
+  ```json
+  {
+    "id": 1,
+    "username": "admin",
+    "roles": [
+      {
+        "id": 1,
+        "name": "ROLE_ADMIN"
+      }
+    ]
+  }
+  ```
+
+#### **3. Criar um Novo Usuário**
+- **Método**: `POST`
+- **URL**: `/admin/users`
+- **Acesso**: Apenas administradores
+- **Corpo da Requisição**:
+  ```json
+  {
+    "username": "newuser",
+    "password": "password123",
+    "roles": [
+      {
+        "id": 2,
+        "name": "ROLE_USER"
+      }
+    ]
+  }
+  ```
+- **Resposta**:
+  ```json
+  {
+    "id": 2,
+    "username": "newuser",
+    "roles": [
+      {
+        "id": 2,
+        "name": "ROLE_USER"
+      }
+    ]
+  }
+  ```
+
+#### **4. Atualizar Usuário**
+- **Método**: `PUT`
+- **URL**: `/admin/users/{id}`
+- **Acesso**: Apenas administradores
+- **Corpo da Requisição**:
+  ```json
+  {
+    "username": "updateduser",
+    "password": "newpassword123",
+    "roles": [
+      {
+        "id": 1,
+        "name": "ROLE_ADMIN"
+      }
+    ]
+  }
+  ```
+- **Resposta**:
+  ```json
+  {
+    "id": 1,
+    "username": "updateduser",
+    "roles": [
+      {
+        "id": 1,
+        "name": "ROLE_ADMIN"
+      }
+    ]
+  }
+  ```
+
+#### **5. Deletar Usuário**
+- **Método**: `DELETE`
+- **URL**: `/admin/users/{id}`
+- **Acesso**: Apenas administradores
+- **Resposta**: `204 No Content`
+
+---
 
 ## 🚀 Como Executar o Projeto
 
@@ -138,13 +261,16 @@ Esta é uma API RESTful desenvolvida em **Java** com **Spring Boot** para gerenc
    git clone https://github.com/yuamignoni/agenciaviagem.git
    cd travel-agency-api
    ```
-
-2. Compile e execute o projeto:
+2. Suba o container PostgreSQL:
+   ```bash
+   docker-compose up -d
+   ```
+3. Compile e execute o projeto:
    ```bash
    ./mvnw spring-boot:run
    ```
 
-3. Acesse a API em:  
+4. Acesse a API em:  	
    `http://localhost:8080`
 
 ---

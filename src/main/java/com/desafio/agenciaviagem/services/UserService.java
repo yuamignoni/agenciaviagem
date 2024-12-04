@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 import com.desafio.agenciaviagem.entities.User;
 import com.desafio.agenciaviagem.repositories.UserRepository;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -31,12 +35,36 @@ public class UserService implements UserDetailsService {
                 user.getPassword(),
                 user.getRoles().stream()
                     .map(role -> new SimpleGrantedAuthority(role.getName()))
-                    .toList()
+                    .collect(Collectors.toList())
         );
     }
 
     public User saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new IllegalArgumentException("User with id " + id + " does not exist.");
+        }
+        userRepository.deleteById(id);
+    }
+
+    public User updateUser(Long id, User updatedUser) {
+        User existingUser = userRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("User with id " + id + " not found."));
+        existingUser.setUsername(updatedUser.getUsername());
+        existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        existingUser.setRoles(updatedUser.getRoles());
+        return userRepository.save(existingUser);
     }
 }
